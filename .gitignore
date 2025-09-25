@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+*.pnp
+.pnp.js
+
+# Package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+.next/
+dist/
+build/
+target/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Rust
+/target
+Cargo.lock
+
+# Solana
+.anchor/
+test-ledger/
+keypairs/
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+
+# Coverage
+coverage/
+.nyc_output/

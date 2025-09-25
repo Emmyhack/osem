@@ -1,0 +1,26 @@
+[package]
+name = "oseme-trust"
+version = "0.1.0"
+description = "Oseme trust and staking program - handles member staking, trust scores, slashing, and bonuses"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "oseme_trust"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang = "0.29.0"
+anchor-spl = "0.29.0"
+spl-token = "4.0.0"
+spl-associated-token-account = "2.2.0"
+
+[dev-dependencies]
+solana-program-test = "1.17.0"
+tokio = "1.0"

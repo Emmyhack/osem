@@ -1,0 +1,82 @@
+name: Security
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 2 * * 1' # Weekly on Monday at 2 AM
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          
+      - name: Setup yarn
+        uses: yarn/action-setup@v2
+        with:
+          version: 8
+          
+      - name: Install dependencies
+        run: yarn install
+        
+      - name: Run audit
+        run: yarn audit
+        
+      - name: Dependency vulnerability scan
+        run: |
+          yarn --filter frontend audit
+          yarn --filter backend audit
+          yarn --filter indexer audit
+          
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: clippy
+          
+      - name: Rust security audit
+        run: |
+          cargo install cargo-audit
+          cd programs && cargo audit
+          
+      - name: Rust clippy lints
+        run: |
+          cd programs/oseme-group && cargo clippy -- -D warnings
+          cd ../oseme-trust && cargo clippy -- -D warnings
+          cd ../oseme-treasury && cargo clippy -- -D warnings
+
+  codeql:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript, typescript
+          
+      - name: Setup yarn
+        uses: yarn/action-setup@v2
+        with:
+          version: 8
+          
+      - name: Install dependencies
+        run: yarn install
+        
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2

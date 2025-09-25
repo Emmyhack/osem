@@ -1,0 +1,128 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '8'
+
+jobs:
+  deploy-devnet:
+    if: github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    environment: devnet
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: Setup yarn
+        uses: yarn/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Install dependencies
+        run: yarn install
+        
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          
+      - name: Install Anchor
+        run: cargo install --git https://github.com/coral-xyz/anchor anchor-cli --locked
+        
+      - name: Build and test
+        run: |
+          yarn build
+          yarn test
+          
+      - name: Deploy programs to devnet
+        env:
+          ANCHOR_WALLET: ${{ secrets.DEVNET_DEPLOY_KEY }}
+        run: |
+          echo "$ANCHOR_WALLET" > wallet.json
+          solana config set --keypair wallet.json
+          solana config set --url devnet
+          yarn anchor:deploy:devnet
+          
+      - name: Deploy frontend to Vercel (preview)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          yarn add -g vercel
+          cd frontend
+          vercel deploy --token=$VERCEL_TOKEN
+
+  deploy-mainnet:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment: mainnet
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: Setup yarn
+        uses: yarn/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - name: Install dependencies
+        run: yarn install
+        
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          
+      - name: Install Anchor
+        run: cargo install --git https://github.com/coral-xyz/anchor anchor-cli --locked
+        
+      - name: Run full test suite
+        run: |
+          yarn build
+          yarn test
+          yarn test:acceptance
+          
+      - name: Deploy programs to mainnet
+        env:
+          ANCHOR_WALLET: ${{ secrets.MAINNET_DEPLOY_KEY }}
+        run: |
+          echo "$ANCHOR_WALLET" > wallet.json
+          solana config set --keypair wallet.json
+          solana config set --url mainnet-beta
+          yarn anchor:deploy:mainnet
+          
+      - name: Deploy frontend to production
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          yarn add -g vercel
+          cd frontend
+          vercel deploy --prod --token=$VERCEL_TOKEN
+          
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false

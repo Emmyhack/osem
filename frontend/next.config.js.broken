@@ -1,0 +1,74 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Minimal config for fast development
+  reactStrictMode: false, // Disable strict mode for faster dev
+  swcMinify: true,
+  
+  // Disable heavy features in development
+  ...(process.env.NODE_ENV === 'development' && {
+    experimental: {
+      // Disable turbo temporarily to avoid compatibility issues
+      turbo: false,
+    },
+    // Minimal webpack config
+    webpack: (config, { dev }) => {
+      if (dev) {
+        // Solana fallbacks only
+        config.resolve.fallback = {
+          fs: false,
+          net: false,
+          tls: false,
+        };
+        
+        // Disable heavy optimizations in dev
+        config.optimization = {
+          ...config.optimization,
+          minimize: false,
+          splitChunks: false,
+        };
+      }
+      return config;
+    },
+  }),
+  
+  // Production optimizations (keep these)
+  ...(process.env.NODE_ENV === 'production' && {
+    experimental: {
+      optimizePackageImports: ['@solana/web3.js', 'lucide-react'],
+    },
+    webpack: (config, { dev, isServer }) => {
+      config.resolve.fallback = {
+        fs: false,
+        net: false,
+        tls: false,
+      };
+      
+      if (!dev) {
+        config.optimization = {
+          ...config.optimization,
+          splitChunks: {
+            chunks: 'all',
+            cacheGroups: {
+              solana: {
+                test: /[\\/]node_modules[\\/](@solana|@coral-xyz)[\\/]/,
+                name: 'solana',
+                priority: 10,
+                reuseExistingChunk: true,
+              },
+            },
+          },
+        };
+      }
+      
+      return config;
+    },
+  }),
+  
+  // Environment variables
+  env: {
+    NEXT_PUBLIC_SOLANA_NETWORK: process.env.NEXT_PUBLIC_SOLANA_NETWORK || 'devnet',
+    NEXT_PUBLIC_RPC_ENDPOINT: process.env.NEXT_PUBLIC_RPC_ENDPOINT || 'https://api.devnet.solana.com',
+  },
+}
+
+module.exports = nextConfig

@@ -1,0 +1,70 @@
+# GitHub Actions CI/CD for Oseme
+name: CI
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          
+      - name: Enable Corepack
+        run: corepack enable
+          
+      - name: Setup Yarn cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            .yarn/cache
+            .yarn/install-state.gz
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+            
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          
+      - name: Install Anchor
+        run: cargo install --git https://github.com/coral-xyz/anchor anchor-cli --locked
+        
+      - name: Install dependencies
+        run: yarn install
+        
+      - name: Build Anchor programs
+        run: |
+          cd programs/oseme-group && anchor build
+          cd ../oseme-trust && anchor build
+          cd ../oseme-treasury && anchor build
+          
+      - name: Run tests
+        run: |
+          cd programs/oseme-group && anchor test
+          cd ../oseme-trust && anchor test
+          cd ../oseme-treasury && anchor test
+          
+      - name: Build frontend
+        run: yarn build:frontend
+        
+      - name: Build backend
+        run: yarn build:backend
+        
+      - name: Lint
+        run: yarn lint
+        
+      - name: Deploy (devnet)
+        if: github.ref == 'refs/heads/dev'
+        run: echo "Deploy to devnet pipeline here"
+        
+      - name: Deploy (mainnet)
+        if: github.ref == 'refs/heads/main'
+        run: echo "Deploy to mainnet pipeline here"
