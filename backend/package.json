@@ -12,7 +12,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "format": "prettier --write .",
-    "clean": "rm -rf dist node_modules",
+  "clean": "rm -rf dist node_modules",
     "deploy:dev": "vercel --env .env.development",
     "deploy:prod": "vercel --prod"
   },
@@ -39,9 +39,7 @@
     "@types/nodemailer": "^6.4.13",
     "@types/pg": "^8.10.7",
     "@types/web-push": "^3.6.3",
-    "eslint": "^8.53.0",
-    "@typescript-eslint/eslint-plugin": "^6.10.0",
-    "@typescript-eslint/parser": "^6.10.0",
+
     "typescript": "^5.2.2"
   }
 }

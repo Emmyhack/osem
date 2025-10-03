@@ -1,0 +1,67 @@
+{
+  "name": "oseme",
+  "version": "1.0.0",
+  "description": "Decentralized thrift (esusu) platform on Solana",
+  "private": true,
+  "packageManager": "yarn@1.22.22",
+  "scripts": {
+    "dev": "yarn --cwd frontend-vite dev",
+    "build": "yarn workspaces run build",
+    "build:frontend": "yarn --cwd frontend-vite build",
+    "build:backend": "yarn --cwd backend build",
+    "test": "yarn workspaces run test",
+    "test:acceptance": "yarn --cwd frontend test:acceptance",
+    "lint": "yarn workspaces run lint",
+    "format": "yarn workspaces run format",
+    "type-check": "yarn workspaces run type-check",
+    "install:all": "yarn install",
+    "clean": "yarn workspaces run clean && rm -rf node_modules",
+    "deploy:dev": "yarn --cwd backend deploy:dev && yarn --cwd frontend-vite deploy:dev",
+    "deploy:prod": "yarn --cwd backend deploy:prod && yarn --cwd frontend-vite deploy:prod",
+    "anchor:build": "anchor build",
+    "anchor:test": "anchor test",
+    "anchor:deploy:devnet": "anchor deploy --provider.cluster devnet",
+    "anchor:deploy:mainnet": "anchor deploy --provider.cluster mainnet-beta",
+    "indexer:start": "yarn --cwd indexer start",
+    "indexer:dev": "yarn --cwd indexer dev",
+    "db:migrate": "yarn --cwd indexer migrate"
+  },
+  "workspaces": [
+    "frontend-vite",
+    "backend",
+    "indexer",
+    "programs/*"
+  ],
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^20.5.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.47.0",
+    "jest-environment-jsdom": "^30.1.2",
+    "postcss": "^8.5.6",
+    "prettier": "^3.0.0",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.1.6"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "yarn": ">=1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/oseme.git"
+  },
+  "keywords": [
+    "solana",
+    "defi",
+    "thrift",
+    "esusu",
+    "savings",
+    "web3",
+    "blockchain"
+  ],
+  "author": "Oseme Team",
+  "license": "MIT"
+}

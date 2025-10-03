@@ -12,7 +12,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "format": "prettier --write .",
-    "clean": "rm -rf dist node_modules"
+  "clean": "rm -rf dist node_modules"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.29.0",
@@ -27,9 +27,7 @@
   "devDependencies": {
     "@types/node": "^20.9.0",
     "@types/ws": "^8.5.8",
-    "eslint": "^8.53.0",
-    "@typescript-eslint/eslint-plugin": "^6.10.0",
-    "@typescript-eslint/parser": "^6.10.0",
+
     "tsx": "^4.1.2",
     "typescript": "^5.2.2"
   }

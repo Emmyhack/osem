@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/oseme-icon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
+    <title>Oseme - Decentralized Thrift Platform</title>
+    <meta name="description" content="Join rotating savings groups on Solana with USDC. Build wealth together through blockchain-powered community savings." />
+    <meta name="keywords" content="defi, savings, thrift, solana, usdc, blockchain, community" />
+    <meta name="author" content="Oseme Team" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://oseme.io/" />
+    <meta property="og:title" content="Oseme - Decentralized Thrift Platform" />
+    <meta property="og:description" content="Join rotating savings groups on Solana with USDC. Build wealth together through blockchain-powered community savings." />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://oseme.io/" />
+    <meta property="twitter:title" content="Oseme - Decentralized Thrift Platform" />
+    <meta property="twitter:description" content="Join rotating savings groups on Solana with USDC. Build wealth together through blockchain-powered community savings." />
+    <meta property="twitter:image" content="/og-image.png" />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#2563eb" />
+    
+    <!-- PWA Icons -->
+    <link rel="apple-touch-icon" href="/icon-192x192.png" />
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://api.devnet.solana.com" />
+    <link rel="preconnect" href="https://api.mainnet-beta.solana.com" />
+    
+    <!-- Critical CSS inlined to prevent FOUC -->
+    <style>
+      /* Critical above-the-fold styles */
+      * {
+        box-sizing: border-box;
+      }
+      
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+        line-height: 1.5;
+        font-weight: 400;
+        color: #f3f4f6;
+        background-color: #111827;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-text-size-adjust: 100%;
+      }
+      
+      #root {
+        min-height: 100vh;
+      }
+      
+      /* Loading spinner */
+      .loading-spinner {
+        display: inline-block;
+        width: 48px;
+        height: 48px;
+        border: 3px solid #374151;
+        border-radius: 50%;
+        border-top-color: #2563eb;
+        animation: spin 1s ease-in-out infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      /* Prevent layout shift */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <!-- Fallback loading state -->
+      <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; flex-direction: column; gap: 1rem;">
+        <div class="loading-spinner"></div>
+        <p style="color: #9ca3af; font-size: 1.125rem;">Loading Oseme Platform...</p>
+      </div>
+    </div>
+    
+    <!-- Performance monitoring -->
+    <script>
+      // Mark performance start
+      performance.mark('app-start');
+    </script>
+    
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

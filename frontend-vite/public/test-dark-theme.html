@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSEM Dark Theme Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Inter, system-ui, sans-serif;
+            background-color: #111827; 
+            color: white; 
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Colorful Stars Background */
+        .stars-background {
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #ff6b6b, transparent),
+                radial-gradient(2px 2px at 40px 70px, #4ecdc4, transparent),
+                radial-gradient(1px 1px at 90px 40px, #45b7d1, transparent),
+                radial-gradient(1px 1px at 130px 80px, #f9ca24, transparent),
+                radial-gradient(2px 2px at 160px 30px, #f0932b, transparent),
+                radial-gradient(1px 1px at 200px 90px, #eb4d4b, transparent),
+                radial-gradient(1px 1px at 240px 20px, #6c5ce7, transparent),
+                radial-gradient(2px 2px at 280px 60px, #a29bfe, transparent),
+                radial-gradient(1px 1px at 320px 90px, #fd79a8, transparent),
+                radial-gradient(1px 1px at 360px 40px, #00b894, transparent);
+            background-repeat: repeat;
+            background-size: 400px 400px;
+            animation: stars-twinkle 8s ease-in-out infinite alternate;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+        }
+        
+        /* Grid Background */
+        .grid-background {
+            background-image: 
+                linear-gradient(rgba(75, 85, 99, 0.8) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(75, 85, 99, 0.8) 1px, transparent 1px);
+            background-size: 40px 40px;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            animation: grid-slide 20s linear infinite;
+        }
+        
+        @keyframes stars-twinkle {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            25% { opacity: 0.8; transform: scale(1.1); }
+            50% { opacity: 1; transform: scale(0.9); }
+            75% { opacity: 0.7; transform: scale(1.05); }
+        }
+        
+        @keyframes grid-slide {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(-20px) translateY(-20px); }
+        }
+        
+        .content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            max-width: 600px;
+        }
+        
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(to right, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars-background"></div>
+    <div class="grid-background"></div>
+    
+    <div class="content">
+        <div class="card">
+            <h1 class="title">
+                🌟 <span class="gradient-text">OSEM Dark Theme</span>
+            </h1>
+            
+            <h2 style="margin-bottom: 1rem;">Pure HTML Test</h2>
+            
+            <div style="text-align: left; line-height: 1.6;">
+                <p>✅ <strong>Dark Background:</strong> #111827 (dark gray)</p>
+                <p>🌟 <strong>Colorful Stars:</strong> Multiple twinkling colors</p>
+                <p>📏 <strong>Grid Lines:</strong> Animated background grid</p>
+                <p>💎 <strong>Glass Effect:</strong> Backdrop blur card</p>
+                <p>✨ <strong>Animations:</strong> Smooth transitions</p>
+            </div>
+            
+            <div style="margin-top: 2rem; padding: 1rem; background: rgba(168, 85, 247, 0.2); border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.3);">
+                <h3 style="color: #c084fc; margin-bottom: 0.5rem;">🎯 If you see this correctly:</h3>
+                <p style="font-size: 0.9rem;">The dark theme CSS is working perfectly!</p>
+            </div>
+            
+            <p style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.7;">
+                Time: <span id="time"></span>
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        function updateTime() {
+            document.getElementById('time').textContent = new Date().toLocaleString();
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+</html>

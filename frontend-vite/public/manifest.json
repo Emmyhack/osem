@@ -1,0 +1,38 @@
+{
+  "name": "Oseme - Decentralized Thrift Platform",
+  "short_name": "Oseme",
+  "description": "Join rotating savings groups on Solana with USDC",
+  "theme_color": "#2563eb",
+  "background_color": "#111827",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/oseme-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["finance", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Browse Groups",
+      "short_name": "Groups",
+      "description": "View all available savings groups",
+      "url": "/groups",
+      "icons": [{ "src": "/oseme-icon.svg", "sizes": "96x96" }]
+    }
+  ]
+}
