@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useWallet } from '../hooks/useWalletProvider'
+import { useWallet } from '../components/MinimalWalletProvider'
 import NavigationIntegrated from '../components/NavigationIntegrated'
 import Footer from '../components/Footer'
 
 const GroupsPage = () => {
-  const { connected, program, connect } = useWallet()
+  const { connected, publicKey, connect } = useWallet()
   const [groups, setGroups] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'basic' | 'trust' | 'superTrust'>('all')
@@ -13,13 +13,41 @@ const GroupsPage = () => {
 
   useEffect(() => {
     const loadGroups = async () => {
-      if (!program) {
-        setLoading(false)
-        return
-      }
-
+      setLoading(true)
       try {
-        const allGroups = await program.getAllGroups()
+        // Mock groups data - replace with actual Solana program calls later
+        const allGroups = [
+          {
+            id: '1',
+            name: 'Tech Builders Group',
+            target: 10000,
+            raised: 7500,
+            members: 25,
+            category: 'Technology',
+            model: { basic: true },
+            description: 'A group for tech professionals to save together'
+          },
+          {
+            id: '2',
+            name: 'DeFi Savers',
+            target: 5000,
+            raised: 3200,
+            members: 15,
+            category: 'Finance',
+            model: { trust: true },
+            description: 'DeFi enthusiasts building wealth through smart savings'
+          },
+          {
+            id: '3',
+            name: 'Creative Fund',
+            target: 8000,
+            raised: 4500,
+            members: 20,
+            category: 'Arts',
+            model: { superTrust: true },
+            description: 'Artists and creators pooling resources for projects'
+          }
+        ]
         setGroups(allGroups)
       } catch (error) {
         console.error('Error loading groups:', error)
@@ -29,7 +57,7 @@ const GroupsPage = () => {
     }
 
     loadGroups()
-  }, [program])
+  }, [publicKey])
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {

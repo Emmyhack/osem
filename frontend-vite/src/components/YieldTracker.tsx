@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { useWallet } from './MinimalWalletProvider'
 import { usdcStakingService } from '../services/USDCStakingService'
 
 // UI Components

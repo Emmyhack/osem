@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useWallet } from '../hooks/useWalletProvider'
+import { useWallet } from '../components/MinimalWalletProvider'
 import NavigationIntegrated from '../components/NavigationIntegrated'
 import Footer from '../components/Footer'
 
 const ProfilePageIntegrated = () => {
-  const { connected, program, publicKey, balance, connect } = useWallet()
-  const [loading, setLoading] = useState(true)
+  const { connected, publicKey, connect } = useWallet()
   const [activeTab, setActiveTab] = useState<'overview' | 'groups' | 'activity' | 'settings'>('overview')
   const [showBalance, setShowBalance] = useState(true)
+  const [balance, setBalance] = useState(0)
   const [userGroups, setUserGroups] = useState<any[]>([])
-  const [userStats, setUserStats] = useState({
+  const [userStats] = useState({
     totalContributed: 0,
     totalReceived: 0,
     activeGroups: 0,
@@ -25,33 +25,45 @@ const ProfilePageIntegrated = () => {
 
   useEffect(() => {
     const loadUserData = async () => {
-      setLoading(true)
       try {
-        if (program && connected) {
-          // Load user's groups
-          const groups = await program.getAllGroups()
-          const myGroups = groups.filter(() => Math.random() > 0.5) // Mock filter
-          setUserGroups(myGroups.slice(0, 5))
-
-          // Calculate stats
-          setUserStats({
-            totalContributed: Math.random() * 5000 + 1000,
-            totalReceived: Math.random() * 3000 + 500,
-            activeGroups: myGroups.length,
-            completedGroups: Math.floor(Math.random() * 10) + 2,
-            joinDate: 'January 2024',
-            streak: Math.floor(Math.random() * 100) + 20
-          })
+        if (connected && publicKey) {
+          // Mock user groups data
+          const groups = [
+            {
+              id: '1',
+              name: 'Tech Builders Group',
+              members: 25,
+              target: 10000,
+              raised: 7500,
+              status: 'active',
+              userRole: 'member'
+            },
+            {
+              id: '2',
+              name: 'DeFi Savers',
+              members: 15,
+              target: 5000,
+              raised: 5000,
+              status: 'completed',
+              userRole: 'creator'
+            }
+          ]
+          setUserGroups(groups)
+          
+          // Mock balance
+          setBalance(12.34)
         }
+        
+        // Simulate loading delay
+        await new Promise(resolve => setTimeout(resolve, 800))
+        
       } catch (error) {
         console.error('Error loading user data:', error)
-      } finally {
-        setLoading(false)
       }
     }
 
     loadUserData()
-  }, [program, connected])
+  }, [connected, publicKey])
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {

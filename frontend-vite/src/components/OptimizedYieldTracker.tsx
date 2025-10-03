@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { useWallet } from './MinimalWalletProvider'
+import Navigation from './Navigation'
 import { usdcStakingService } from '../services/USDCStakingService'
 import { fastYieldService } from '../services/FastYieldService'
 import { useLoadingOptimizer } from '../utils/LoadingOptimizer'
@@ -282,8 +283,20 @@ const OptimizedYieldTracker = () => {
 
   if (!connected) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 p-6">
-        <div className="max-w-4xl mx-auto pt-20">
+      <div className="min-h-screen bg-gray-900 relative overflow-hidden">
+        {/* Dark Theme with Colorful Stars */}
+        <div className="absolute inset-0 stars-background"></div>
+        <div className="absolute inset-0 stars-background-large opacity-60"></div>
+        <div className="absolute inset-0 grid-background"></div>
+        <div className="absolute inset-0 grid-background-fine opacity-40"></div>
+        <div className="absolute inset-0 grid-dots opacity-20"></div>
+        
+        {/* Subtle Dark Overlays for Depth */}
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gray-900/20 via-transparent to-gray-800/30"></div>
+        
+        <Navigation />
+        
+        <div className="max-w-4xl mx-auto pt-20 relative z-10 p-6">
           <Card className="bg-white/5 border-white/20">
             <CardContent className="p-8 text-center">
               <h2 className="text-2xl font-bold text-white mb-4">Connect Wallet</h2>
@@ -296,8 +309,20 @@ const OptimizedYieldTracker = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 p-6">
-      <div className="max-w-7xl mx-auto pt-20">
+    <div className="min-h-screen bg-gray-900 relative overflow-hidden">
+      {/* Dark Theme with Colorful Stars */}
+      <div className="absolute inset-0 stars-background"></div>
+      <div className="absolute inset-0 stars-background-large opacity-60"></div>
+      <div className="absolute inset-0 grid-background"></div>
+      <div className="absolute inset-0 grid-background-fine opacity-40"></div>
+      <div className="absolute inset-0 grid-dots opacity-20"></div>
+      
+      {/* Subtle Dark Overlays for Depth */}
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gray-900/20 via-transparent to-gray-800/30"></div>
+      
+      <Navigation />
+      
+      <div className="max-w-7xl mx-auto pt-20 relative z-10 p-6">
         
         {/* Header */}
         <div className="text-center mb-8">

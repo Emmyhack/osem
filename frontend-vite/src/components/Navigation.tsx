@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { useWallet, SimpleWalletButton } from './TempWalletProvider'
-import { Menu, X, Zap } from 'lucide-react'
+import { useWallet, SimpleWalletButton } from './MinimalWalletProvider'
+import { Menu, X, Zap, Wallet } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
 const Navigation: React.FC = () => {
-    const { connected } = useWallet()
+    const { connected, publicKey } = useWallet()
     const location = useLocation()
     const [mounted, setMounted] = useState(false)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -79,14 +79,23 @@ const Navigation: React.FC = () => {
 
                         {/* Wallet Connection */}
                         <div className="flex items-center space-x-4">
-                            <SimpleWalletButton className="bg-blue-600 text-white font-medium px-6 py-2 rounded-lg border-none hover:bg-blue-700 transition-colors duration-200" />
-                            {connected && (
-                                <Link
-                                    to="/profile"
-                                    className="text-gray-300 hover:text-white transition-colors font-medium"
-                                >
-                                    Profile
-                                </Link>
+                            {connected && publicKey ? (
+                                <div className="flex items-center space-x-3">
+                                    <div className="flex items-center space-x-2 bg-green-500/20 text-green-400 px-3 py-1.5 rounded-lg border border-green-500/30">
+                                        <Wallet className="w-4 h-4" />
+                                        <span className="text-sm font-medium">
+                                            {publicKey.toString().slice(0, 4)}...{publicKey.toString().slice(-4)}
+                                        </span>
+                                    </div>
+                                    <Link
+                                        to="/profile"
+                                        className="text-gray-300 hover:text-white transition-colors font-medium"
+                                    >
+                                        Profile
+                                    </Link>
+                                </div>
+                            ) : (
+                                <SimpleWalletButton className="bg-blue-600 text-white font-medium px-6 py-2 rounded-lg border-none hover:bg-blue-700 transition-colors duration-200" />
                             )}
                         </div>
                     </div>
@@ -118,19 +127,29 @@ const Navigation: React.FC = () => {
                                     {item.label}
                                 </Link>
                             ))}
-                            {connected && (
-                                <Link
-                                    to="/profile"
-                                    className="text-gray-300 hover:text-white transition-colors px-4 py-2"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    Profile
-                                </Link>
+                            {connected && publicKey && (
+                                <>
+                                    <div className="flex items-center space-x-2 bg-green-500/20 text-green-400 px-4 py-2 rounded-lg border border-green-500/30 mx-4">
+                                        <Wallet className="w-4 h-4" />
+                                        <span className="text-sm font-medium">
+                                            {publicKey.toString().slice(0, 4)}...{publicKey.toString().slice(-4)}
+                                        </span>
+                                    </div>
+                                    <Link
+                                        to="/profile"
+                                        className="text-gray-300 hover:text-white transition-colors px-4 py-2"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        Profile
+                                    </Link>
+                                </>
                             )}
 
-                            <div className="pt-4 border-t border-gray-700">
-                                <SimpleWalletButton className="w-full bg-blue-600 text-white font-medium px-6 py-3 rounded-lg border-none hover:bg-blue-700 transition-colors duration-200" />
-                            </div>
+                            {!connected && (
+                                <div className="pt-4 border-t border-gray-700">
+                                    <SimpleWalletButton className="w-full bg-blue-600 text-white font-medium px-6 py-3 rounded-lg border-none hover:bg-blue-700 transition-colors duration-200" />
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}

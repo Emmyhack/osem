@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { useWallet } from './MinimalWalletProvider'
 // Using existing UI components from the project
 const Card = ({ children, className = '', ...props }: any) => (
   <div className={`rounded-lg border ${className}`} {...props}>{children}</div>
@@ -25,7 +25,7 @@ const Button = ({ children, className = '', disabled = false, onClick, size, ...
     {children}
   </button>
 )
-import { solanaFiatService, FIAT_ONRAMP_PROVIDERS } from '../services/SolanaFiatOnRampService'
+import { solanaFiatService } from '../services/SolanaFiatOnRampService'
 
 enum FiatProvider {
   MOONPAY = 'moonpay',

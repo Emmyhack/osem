@@ -136,8 +136,6 @@ export default defineConfig({
           vendor: ['react', 'react-dom'],
           solana: [
             '@solana/web3.js',
-            '@solana/wallet-adapter-react',
-            '@solana/wallet-adapter-base',
             '@coral-xyz/anchor',
           ],
           ui: [
@@ -165,7 +163,6 @@ export default defineConfig({
       'react',
       'react-dom',
       '@solana/web3.js',
-      '@solana/wallet-adapter-react',
       '@coral-xyz/anchor',
       'buffer',
       'process',
@@ -173,6 +170,8 @@ export default defineConfig({
     ],
     exclude: [
       '@solana/wallet-adapter-wallets',
+      '@solana/wallet-adapter-react',
+      '@solana/wallet-adapter-base',
       '@walletconnect/time',
       '@walletconnect/window-getters',
       '@walletconnect/window-metadata',

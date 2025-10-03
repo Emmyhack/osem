@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { useWallet } from './MinimalWalletProvider'
 // Using existing UI components from the project
 const Card = ({ children, className = '', ...props }: any) => (
   <div className={`rounded-lg border ${className}`} {...props}>{children}</div>
@@ -57,7 +57,7 @@ const StakingInterface = ({ groupData, onStakingComplete }: StakingInterfaceProp
   const [pendingRewards, setPendingRewards] = useState(0)
 
   const tierConfig = GROUP_TIER_CONFIGS[groupData.tier]
-  const minimumStake = tierConfig.stakeRequirement
+  const minimumStake = tierConfig.solStakeRequirement
 
   // Stake duration options with APY rates
   const stakeDurations = [

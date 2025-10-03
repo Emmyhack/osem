@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { useWallet } from './MinimalWalletProvider'
 // Using existing UI components from the project
 const Card = ({ children, className = '', ...props }: any) => (
   <div className={`roun                  <div className="flex justify-between">

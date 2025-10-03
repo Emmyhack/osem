@@ -1,19 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import { WalletProvider } from './hooks/useWalletProvider'
+import { MinimalWalletProvider } from './components/MinimalWalletProvider'
 import App from './App'
 import './index.css'
 
-console.log('🌟 Starting OSEM with dark theme...')
+console.log('🌟 Starting OSEM with unified Phantom wallet support...')
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <WalletProvider>
+    <MinimalWalletProvider>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </WalletProvider>
+    </MinimalWalletProvider>
   </React.StrictMode>,
 )
 

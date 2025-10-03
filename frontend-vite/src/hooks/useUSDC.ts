@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { useWallet, useConnection } from '@solana/wallet-adapter-react'
+import { useWallet } from '../components/MinimalWalletProvider'
 import { getAssociatedTokenAddress, getAccount } from '@solana/spl-token'
+import { Connection, clusterApiUrl } from '@solana/web3.js'
 import { getCurrentUSDC } from '../lib/solana'
 
 interface USDCBalance {
@@ -12,9 +13,9 @@ interface USDCBalance {
 
 export function useUSDC(): USDCBalance {
   const { publicKey } = useWallet()
-  const { connection } = useConnection()
-  const [balance, setBalance] = useState<number>(0)
-  const [loading, setLoading] = useState<boolean>(false)
+  const connection = new Connection(clusterApiUrl('devnet'))
+  const [balance, setBalance] = useState(0)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const fetchBalance = async () => {

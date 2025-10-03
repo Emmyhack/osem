@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useWallet } from '../hooks/useWalletProvider'
+import { useWallet } from '../components/MinimalWalletProvider'
 import NavigationIntegrated from '../components/NavigationIntegrated'
 import Footer from '../components/Footer'
 import RealYieldOptimization from '../components/RealYieldOptimization'
@@ -8,69 +8,60 @@ import RealInsuranceReserve from '../components/RealInsuranceReserve'
 import { RealDataDashboard } from '../components/RealDataCharts'
 
 const DashboardPage = () => {
-  const { connected, program, connect, balance } = useWallet()
+  const { connected, publicKey, connect } = useWallet()
   const [userGroups, setUserGroups] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'overview' | 'groups' | 'yield' | 'insurance' | 'analytics'>('overview')
+  const [balance, setBalance] = useState(0)
 
   useEffect(() => {
     const loadDashboard = async () => {
-      if (!connected || !program) {
-        setLoading(false)
+      if (!connected || !publicKey) {
         return
       }
 
       try {
-        const groups = await program.getUserGroups()
-        setUserGroups(groups)
+        // Mock data for now - replace with actual Solana program calls later
+        setUserGroups([
+          {
+            id: '1',
+            name: 'Tech Builders Group',
+            members: 25,
+            target: 10000,
+            raised: 7500,
+            status: 'active'
+          },
+          {
+            id: '2', 
+            name: 'DeFi Savers',
+            members: 15,
+            target: 5000,
+            raised: 5000,
+            status: 'completed'
+          }
+        ])
+        
+        // Mock balance - replace with actual balance fetch
+        setBalance(12.34)
       } catch (error) {
         console.error('Error loading dashboard:', error)
-      } finally {
-        setLoading(false)
       }
     }
 
     loadDashboard()
-  }, [connected, program])
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2
-    }).format(amount)
-  }
-
-  const formatGroupModel = (model: any) => {
-    if (model.basic) return 'Basic'
-    if (model.trust) return 'Trust'
-    if (model.superTrust) return 'Super Trust'
-    return 'Unknown'
-  }
-
-  const calculateTotalContributed = () => {
-    return userGroups.reduce((total, group) => {
-      const contributionAmount = group.contributionAmount.toNumber() / 1e6
-      const contributedTurns = group.currentTurnIndex || 0
-      return total + (contributionAmount * contributedTurns)
-    }, 0)
-  }
-
-  const calculateTotalReceived = () => {
-    return userGroups.reduce((total, group) => {
-      const totalPool = group.totalPool.toNumber() / 1e6
-      // Assume user received payout if they were in a previous turn
-      return total + (Math.random() > 0.7 ? totalPool / group.totalMembers : 0)
-    }, 0)
-  }
+  }, [connected, publicKey])
 
   if (!connected) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0 grid-background opacity-20"></div>
-        <div className="absolute inset-0 grid-dots opacity-10"></div>
-        <div className="absolute top-40 right-20 w-32 h-32 bg-purple-500/10 rounded-full blur-xl animate-float"></div>
+      <div className="min-h-screen bg-gray-900 relative overflow-hidden">
+        {/* Dark Theme with Colorful Stars */}
+        <div className="absolute inset-0 stars-background"></div>
+        <div className="absolute inset-0 stars-background-large opacity-60"></div>
+        <div className="absolute inset-0 grid-background"></div>
+        <div className="absolute inset-0 grid-background-fine opacity-40"></div>
+        <div className="absolute inset-0 grid-dots opacity-20"></div>
+        
+        {/* Subtle Dark Overlays for Depth */}
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gray-900/20 via-transparent to-gray-800/30"></div>
         
         <NavigationIntegrated />
         
@@ -114,8 +105,8 @@ const DashboardPage = () => {
       <div className="absolute inset-0 grid-background-fine opacity-40"></div>
       <div className="absolute inset-0 grid-dots opacity-20"></div>
       
-      {/* Subtle Dark Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/40 via-transparent to-gray-800/60"></div>
+      {/* Subtle Dark Overlays for Depth */}
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gray-900/20 via-transparent to-gray-800/30"></div>
       
       <NavigationIntegrated />
       

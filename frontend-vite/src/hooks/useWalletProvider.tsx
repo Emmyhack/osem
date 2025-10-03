@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { PublicKey, Connection } from '@solana/web3.js'
 import { OsemeProgram } from '../lib/oseme-program'
 

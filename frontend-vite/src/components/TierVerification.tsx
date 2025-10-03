@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { useWallet } from './MinimalWalletProvider'
 import { GroupTier, TierVerificationService, UserProfile as ImportedUserProfile } from '../lib/CompleteOsemeProgram'
 import toast from 'react-hot-toast'
 

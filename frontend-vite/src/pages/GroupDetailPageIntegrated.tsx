@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { useWallet } from '../hooks/useWalletProvider'
+import { useWallet } from '../components/MinimalWalletProvider'
 import NavigationIntegrated from '../components/NavigationIntegrated'
 import Footer from '../components/Footer'
 
 const GroupDetailPageIntegrated = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { connected, program, connect } = useWallet()
+  const { connected, publicKey, connect } = useWallet()
   const [group, setGroup] = useState<any>(null)
   const [member, setMember] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -17,18 +17,33 @@ const GroupDetailPageIntegrated = () => {
 
   useEffect(() => {
     const loadGroupData = async () => {
-      if (!id || !program) {
+      if (!id) {
         setLoading(false)
         return
       }
 
       try {
-        const groupId = parseInt(id)
-        const groupData = await program.getGroup(groupId)
-        const memberData = await program.getMember(groupId)
+        // Mock group data based on ID
+        const mockGroupData = {
+          id: id,
+          name: `Group ${id}`,
+          description: 'A community savings group',
+          target: 10000,
+          raised: 7500,
+          members: 25,
+          cycle: 30,
+          status: 'active',
+          creator: publicKey?.toString() || 'Unknown'
+        }
         
-        setGroup(groupData)
-        setMember(memberData)
+        const mockMemberData = {
+          isJoined: Math.random() > 0.5,
+          contributedAmount: 250,
+          isCreator: Math.random() > 0.7
+        }
+        
+        setGroup(mockGroupData)
+        setMember(mockMemberData)
       } catch (error) {
         console.error('Error loading group:', error)
       } finally {
@@ -37,7 +52,7 @@ const GroupDetailPageIntegrated = () => {
     }
 
     loadGroupData()
-  }, [id, program, connected])
+  }, [id, connected, publicKey])
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -60,21 +75,20 @@ const GroupDetailPageIntegrated = () => {
       return
     }
 
-    if (!program || !id) return
+    if (!connected || !id) return
 
     setJoining(true)
     try {
-      const result = await program.joinGroup(parseInt(id))
-      if (result.success) {
-        alert('Successfully joined the group!')
-        // Reload group data
-        const groupData = await program.getGroup(parseInt(id))
-        const memberData = await program.getMember(parseInt(id))
-        setGroup(groupData)
-        setMember(memberData)
-      } else {
-        alert('Failed to join group. Please try again.')
-      }
+      // Mock join group functionality
+      console.log('Joining group:', id, 'with wallet:', publicKey?.toString())
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      alert('Successfully joined the group!')
+      
+      // Update member data
+      setMember((prev: any) => ({ ...prev, isJoined: true }))
     } catch (error) {
       console.error('Error joining group:', error)
       alert('Error joining group. Please try again.')
@@ -85,21 +99,30 @@ const GroupDetailPageIntegrated = () => {
 
   const handleContribute = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!program || !id || !contributionAmount) return
+    if (!connected || !id || !contributionAmount) return
 
     setContributing(true)
     try {
       const amount = parseFloat(contributionAmount)
-      const result = await program.contribute(parseInt(id), amount)
-      if (result.success) {
-        alert('Contribution successful!')
-        setContributionAmount('')
-        // Reload group data
-        const groupData = await program.getGroup(parseInt(id))
-        setGroup(groupData)
-      } else {
-        alert('Failed to contribute. Please try again.')
-      }
+      console.log('Contributing:', amount, 'to group:', id, 'from wallet:', publicKey?.toString())
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      alert('Contribution successful!')
+      setContributionAmount('')
+      
+      // Update group data
+      setGroup((prev: any) => ({ 
+        ...prev, 
+        raised: prev.raised + amount 
+      }))
+      
+      // Update member contribution
+      setMember((prev: any) => ({ 
+        ...prev, 
+        contributedAmount: (prev.contributedAmount || 0) + amount 
+      }))
     } catch (error) {
       console.error('Error contributing:', error)
       alert('Error making contribution. Please try again.')

@@ -1,6 +1,11 @@
 import { Connection, PublicKey, Transaction, SystemProgram } from '@solana/web3.js'
-import { WalletAdapter } from '@solana/wallet-adapter-base'
 import { GroupTier, GROUP_TIER_CONFIGS } from '../lib/CompleteOsemeProgram'
+
+// Define a simple wallet interface that matches our MinimalWalletProvider
+interface SimpleWallet {
+  publicKey: PublicKey | null
+  sendTransaction: (transaction: Transaction, connection: Connection) => Promise<string>
+}
 
 // USDC Token Address on Solana Mainnet
 const USDC_MINT = new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
@@ -70,7 +75,7 @@ class USDCStakingService {
    * Stake USDC for trust verification
    */
   async stakeUSDCForTrust(
-    wallet: WalletAdapter,
+    wallet: SimpleWallet,
     tier: GroupTier,
     groupId?: string
   ): Promise<StakePosition> {
@@ -308,7 +313,7 @@ class USDCStakingService {
    * Withdraw staked USDC and yield
    */
   async withdrawTrustStake(
-    wallet: WalletAdapter,
+    wallet: SimpleWallet,
     trustStakePda: PublicKey
   ): Promise<string> {
     if (!wallet.publicKey) {
@@ -391,7 +396,42 @@ class USDCStakingService {
 
 // Export singleton instance
 export const usdcStakingService = new USDCStakingService(
-  new Connection(process.env.REACT_APP_SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com')
+  new Connection(import.meta.env.VITE_SOLANA_RPC_URL || 'https://api.devnet.solana.com')
 )
+
+// Helper function to create a wallet adapter for our wallet context
+export function createWalletAdapter(walletContext: {
+  publicKey: PublicKey | null
+  sendTransaction?: (transaction: Transaction, connection: Connection) => Promise<string>
+}): SimpleWallet {
+  return {
+    publicKey: walletContext.publicKey,
+    sendTransaction: walletContext.sendTransaction || (async () => {
+      throw new Error('sendTransaction not available')
+    })
+  }
+}
+
+/**
+ * Usage example with MinimalWalletProvider:
+ * 
+ * import { useWallet } from '../components/MinimalWalletProvider'
+ * import { usdcStakingService, createWalletAdapter } from '../services/USDCStakingService'
+ * 
+ * const MyComponent = () => {
+ *   const wallet = useWallet()
+ *   
+ *   const handleStake = async () => {
+ *     if (!wallet.connected) return
+ *     
+ *     const walletAdapter = createWalletAdapter(wallet)
+ *     const stakePosition = await usdcStakingService.stakeUSDCForTrust(
+ *       walletAdapter, 
+ *       GroupTier.Trust,
+ *       'group123'
+ *     )
+ *   }
+ * }
+ */
 
 export default USDCStakingService

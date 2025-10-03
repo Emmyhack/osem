@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useWallet } from '../hooks/useWalletProvider'
-import NavigationIntegrated from '../components/NavigationIntegrated'
+import { useWallet, SimpleWalletButton } from '../components/MinimalWalletProvider'
+import Navigation from '../components/Navigation'
 import Footer from '../components/Footer'
 
 const HomePage = () => {
-  const { connected, program, connect, connecting } = useWallet()
+  const { connected } = useWallet()
   const [stats, setStats] = useState({ totalSaved: 0, activeMembers: 0, groupsCreated: 0 })
   const [featuredGroups, setFeaturedGroups] = useState<any[]>([])
 
@@ -18,19 +18,40 @@ const HomePage = () => {
         groupsCreated: 500
       })
 
-      // Load featured groups
-      if (program) {
-        try {
-          const groups = await program.getAllGroups()
-          setFeaturedGroups(groups.slice(0, 6))
-        } catch (error) {
-          console.error('Error loading groups:', error)
+      // Load featured groups (mock data for now)
+      setFeaturedGroups([
+        {
+          id: '1',
+          name: 'Tech Builders Group',
+          target: 10000,
+          raised: 7500,
+          members: 25,
+          category: 'Technology',
+          model: { basic: true }
+        },
+        {
+          id: '2', 
+          name: 'Small Business Fund',
+          target: 5000,
+          raised: 4200,
+          members: 15,
+          category: 'Business',
+          model: { trust: true }
+        },
+        {
+          id: '3',
+          name: 'Education Pool',
+          target: 8000,
+          raised: 3500,
+          members: 32,
+          category: 'Education',
+          model: { superTrust: true }
         }
-      }
+      ])
     }
 
     loadStats()
-  }, [program])
+  }, [])
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -60,7 +81,7 @@ const HomePage = () => {
         {/* Subtle Dark Overlays for Depth */}
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gray-900/20 via-transparent to-gray-800/30"></div>
       
-      <NavigationIntegrated />
+      <Navigation />
       
       {/* Hero Section */}
       <section className="relative py-20 z-10">
@@ -95,22 +116,7 @@ const HomePage = () => {
               </>
             ) : (
               <>
-                <button
-                  onClick={connect}
-                  disabled={connecting}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 animate-glow shadow-lg"
-                >
-                  {connecting ? (
-                    <span className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
-                      Connecting...
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      🔗 Connect Wallet
-                    </span>
-                  )}
-                </button>
+                <SimpleWalletButton className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 animate-glow shadow-lg border-none" />
                 <Link 
                   to="/groups"
                   className="border border-white/30 backdrop-blur-sm text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white/20 hover:border-white/50 transition-all duration-300"
@@ -214,14 +220,17 @@ const HomePage = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredGroups.map((group, index) => {
-              const totalPool = group.totalPool.toNumber() / 1e6
-              const contributionAmount = group.contributionAmount.toNumber() / 1e6
-              const progress = Math.min((group.currentTurnIndex / group.totalMembers) * 100, 100)
+              // Handle both real Solana data and mock data structures
+              const totalPool = group.totalPool ? (group.totalPool.toNumber() / 1e6) : (group.target || 0)
+              const contributionAmount = group.contributionAmount ? (group.contributionAmount.toNumber() / 1e6) : ((group.raised || 0) / (group.members || 1))
+              const progress = group.currentTurnIndex && group.totalMembers 
+                ? Math.min((group.currentTurnIndex / group.totalMembers) * 100, 100)
+                : Math.min(((group.raised || 0) / (group.target || 1)) * 100, 100)
               
               return (
                 <Link
                   key={index}
-                  to={`/groups/${group.groupId.toNumber()}`}
+                  to={`/groups/${group.groupId ? group.groupId.toNumber() : group.id}`}
                   className="group bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 animate-card-hover cursor-pointer relative overflow-hidden animate-slide-in-up"
                   style={{ 
                     animationDelay: `${0.1 * index}s`, 
@@ -233,7 +242,9 @@ const HomePage = () => {
                   
                   <div className="flex justify-between items-start mb-4 relative z-10">
                     <h3 className="text-lg font-semibold text-white group-hover:text-purple-200 transition-colors">
-                      {formatGroupModel(group.model)} Group #{group.groupId.toNumber()}
+                                          <h3 className="text-xl font-semibold text-white mb-2 relative z-10 group-hover:text-blue-300 transition-colors">
+                      {group.name || `${formatGroupModel(group.model)} Group #${group.groupId ? group.groupId.toNumber() : group.id}`}
+                    </h3>
                     </h3>
                     <span className="px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 text-xs rounded-full border border-purple-500/30">
                       {formatGroupModel(group.model)}
@@ -241,7 +252,7 @@ const HomePage = () => {
                   </div>
                   
                   <p className="text-gray-400 text-sm mb-6 relative z-10 group-hover:text-gray-300 transition-colors">
-                    {group.totalMembers} / {group.memberCap} members
+                    {group.totalMembers || group.members || 0} / {group.memberCap || (group.members || 0) + 5} members
                   </p>
                   
                   <div className="space-y-3 relative z-10">

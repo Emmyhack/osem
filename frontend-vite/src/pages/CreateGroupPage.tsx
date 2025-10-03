@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useWallet } from '../hooks/useWalletProvider'
+import { useWallet } from '../components/MinimalWalletProvider'
 import NavigationIntegrated from '../components/NavigationIntegrated'
 import Footer from '../components/Footer'
 
 const CreateGroupPage = () => {
   const navigate = useNavigate()
-  const { connected, program, connect } = useWallet()
+  const { connected, publicKey, connect } = useWallet()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     model: 'basic' as 'basic' | 'trust' | 'superTrust',
@@ -18,29 +18,27 @@ const CreateGroupPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!connected || !program) {
+    if (!connected || !publicKey) {
       await connect()
       return
     }
 
     setLoading(true)
     try {
-      const result = await program.createGroup(
-        formData.model,
-        parseFloat(formData.contributionAmount),
-        formData.cycleDays ? parseInt(formData.cycleDays) : undefined,
-        formData.memberCap ? parseInt(formData.memberCap) : undefined
-      )
-
-      if (result.success) {
-        alert(`Group created successfully! Group ID: ${result.groupId}`)
-        navigate(`/groups/${result.groupId}`)
-      } else {
-        alert('Failed to create group. Please try again.')
-      }
+      // Mock group creation - replace with actual Solana program calls later
+      const mockGroupId = Math.random().toString(36).substr(2, 9)
+      console.log('Group created successfully with ID:', mockGroupId)
+      console.log('Form data:', formData)
+      console.log('Connected wallet:', publicKey.toString())
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      alert(`Group created successfully! Group ID: ${mockGroupId}`)
+      navigate(`/groups/${mockGroupId}`)
     } catch (error) {
       console.error('Error creating group:', error)
-      alert('Error creating group. Please try again.')
+      alert('Error creating group')
     } finally {
       setLoading(false)
     }

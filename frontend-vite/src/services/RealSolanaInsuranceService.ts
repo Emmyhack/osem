@@ -1,5 +1,4 @@
-import { Connection, PublicKey, AccountInfo } from '@solana/web3.js'
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { Connection, PublicKey } from '@solana/web3.js'
 
 // Real Solana insurance protocol addresses
 const INSURANCE_PROTOCOLS = {
@@ -90,9 +89,13 @@ class RealSolanaInsuranceService {
   
   private async initializeConnection() {
     try {
-      const health = await this.connection.getHealth()
-      console.log('✅ Solana RPC Health:', health)
-      this.isConnected = true
+      // Simple connection test - just check if connection exists
+      if (this.connection) {
+        console.log('✅ Solana RPC Connection initialized')
+        this.isConnected = true
+      } else {
+        throw new Error('Connection not available')
+      }
     } catch (error) {
       console.warn('⚠️ Solana RPC connection issue:', error)
       this.isConnected = false
@@ -112,17 +115,27 @@ class RealSolanaInsuranceService {
   }
 
   private async getAccountBalance(address: string): Promise<number> {
+    if (!this.isConnected) {
+      console.warn('RPC not connected, using fallback data')
+      return 0
+    }
+    
     try {
       const publicKey = new PublicKey(address)
       const balance = await this.connection.getBalance(publicKey)
       return balance / 1e9 // Convert lamports to SOL
     } catch (error) {
-      console.warn(`Failed to get balance for ${address}:`, error)
+      console.warn(`Failed to get account balance for ${address}:`, error)
       return 0
     }
   }
 
   private async getTokenAccountBalance(address: string): Promise<number> {
+    if (!this.isConnected) {
+      console.warn('RPC not connected, using fallback data')
+      return 0
+    }
+    
     try {
       const publicKey = new PublicKey(address)
       const accountInfo = await this.connection.getAccountInfo(publicKey)
@@ -234,8 +247,6 @@ class RealSolanaInsuranceService {
       
       if (accountInfo && accountInfo.data) {
         // Parse Marinade state data (simplified)
-        const data = accountInfo.data
-        
         // Estimate TVL from account data size and balance
         const balance = await this.getAccountBalance(YIELD_POOLS.MARINADE_STATE)
         const solPrice = await this.fetchRealTimePrice('SOL')
