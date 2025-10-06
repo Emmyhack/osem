@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useWallet } from '../components/MinimalWalletProvider'
+import { useWallet } from '../hooks/useLightWallet'
 import NavigationIntegrated from '../components/NavigationIntegrated'
 import Footer from '../components/Footer'
 
 const ProfilePageIntegrated = () => {
-  const { connected, publicKey, connect } = useWallet()
+  const { connected, publicKey, connect, balance } = useWallet()
   const [activeTab, setActiveTab] = useState<'overview' | 'groups' | 'activity' | 'settings'>('overview')
   const [showBalance, setShowBalance] = useState(true)
-  const [balance, setBalance] = useState(0)
   const [userGroups, setUserGroups] = useState<any[]>([])
   const [userStats] = useState({
     totalContributed: 0,
@@ -49,9 +48,6 @@ const ProfilePageIntegrated = () => {
             }
           ]
           setUserGroups(groups)
-          
-          // Mock balance
-          setBalance(12.34)
         }
         
         // Simulate loading delay

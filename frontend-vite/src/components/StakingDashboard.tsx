@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useWallet } from './MinimalWalletProvider'
+import { useWallet } from '../hooks/useLightWallet'
 import { GroupTier } from '../lib/CompleteOsemeProgram'
 import Navigation from './Navigation'
 import toast from 'react-hot-toast'

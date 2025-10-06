@@ -97,7 +97,7 @@ class SolanaYieldService {
   async fetchJupiterAPY(): Promise<number> {
     try {
       const response = await fetch('https://quote-api.jup.ag/v6/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&amount=1000000')
-      const data = await response.json()
+      await response.json() // Fetch but don't store - using mock data for now
       // Mock calculation based on Jupiter pricing data
       return Math.max(8.5, Math.min(15.2, 10 + Math.random() * 4))
     } catch (error) {

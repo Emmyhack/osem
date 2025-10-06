@@ -1,20 +1,25 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import { MinimalWalletProvider } from './components/MinimalWalletProvider'
-import App from './App'
 import './index.css'
+import { LightWalletProvider } from './hooks/useLightWallet'
+import App from './App'
+import ErrorBoundary from './components/ErrorBoundary'
 
-console.log('🌟 Starting OSEM with unified Phantom wallet support...')
+const container = document.getElementById('root')
+if (!container) {
+  throw new Error('Root element not found')
+}
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const root = createRoot(container)
+root.render(
   <React.StrictMode>
-    <MinimalWalletProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </MinimalWalletProvider>
-  </React.StrictMode>,
+    <ErrorBoundary>
+      <LightWalletProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </LightWalletProvider>
+    </ErrorBoundary>
+  </React.StrictMode>
 )
-
-console.log('✨ OSEM dark theme app loaded successfully')

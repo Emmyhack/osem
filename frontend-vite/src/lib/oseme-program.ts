@@ -1,4 +1,4 @@
-import { Connection, PublicKey, SystemProgram } from '@solana/web3.js'
+import { Connection, PublicKey } from '@solana/web3.js'
 import { BN } from '@coral-xyz/anchor'
 
 // Mock program for development - prevents loading issues
@@ -21,10 +21,10 @@ export class OsemeProgram {
 
   // Mock group creation - returns success immediately
   async createGroup(
-    model: 'basic' | 'trust' | 'superTrust',
-    contributionAmount: number,
-    cycleDays?: number,
-    memberCap?: number
+    _model: 'basic' | 'trust' | 'superTrust',
+    _contributionAmount: number,
+    _cycleDays?: number,
+    _memberCap?: number
   ): Promise<{ success: boolean; groupId?: number; signature?: string }> {
     if (!this.isInitialized) {
       return { success: false }
@@ -97,12 +97,12 @@ export class OsemeProgram {
   }
 
   // Mock get member data
-  async getMember(groupId: number, userPubkey?: PublicKey): Promise<any> {
+  async getMember(_groupId: number, _userPubkey?: PublicKey): Promise<any> {
     if (!this.isInitialized) return null
 
     return {
       group: new PublicKey('11111111111111111111111111111112'),
-      user: userPubkey || new PublicKey('11111111111111111111111111111112'),
+      user: _userPubkey || new PublicKey('11111111111111111111111111111112'),
       stakeAmount: new BN(50 * 1e6),
       contributedTurns: [true, true, true, false, false],
       missedCount: 0,
@@ -137,7 +137,7 @@ export class OsemeProgram {
   }
 
   // Check if user is member
-  async isGroupMember(groupId: number): Promise<boolean> {
+  async isGroupMember(_groupId: number): Promise<boolean> {
     return this.isInitialized && Math.random() > 0.7 // 30% chance user is member
   }
 

@@ -125,6 +125,17 @@ const YieldOptimization = () => {
     }
   }
 
+  if (loading) {
+    return (
+      <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 animate-glow">
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-400"></div>
+          <span className="ml-3 text-gray-300">Loading yield data...</span>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 animate-glow">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">

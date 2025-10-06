@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useWallet } from '../components/MinimalWalletProvider'
+import { useWallet } from '../hooks/useLightWallet'
 import NavigationIntegrated from '../components/NavigationIntegrated'
 import Footer from '../components/Footer'
 
-const GroupsPage = () => {
+const GroupsPageIntegrated = () => {
   const { connected, publicKey, connect } = useWallet()
   const [groups, setGroups] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -18,34 +18,58 @@ const GroupsPage = () => {
         // Mock groups data - replace with actual Solana program calls later
         const allGroups = [
           {
+            groupId: { toNumber: () => 1 },
             id: '1',
             name: 'Tech Builders Group',
             target: 10000,
             raised: 7500,
             members: 25,
+            totalMembers: 25,
+            memberCap: 30,
             category: 'Technology',
             model: { basic: true },
-            description: 'A group for tech professionals to save together'
+            description: 'A group for tech professionals to save together',
+            totalPool: { toNumber: () => 10000 * 1e6 },
+            contributionAmount: { toNumber: () => 400 * 1e6 },
+            currentTurnIndex: 5,
+            trustScore: 95,
+            createdAt: { toNumber: () => Math.floor((Date.now() - 15 * 24 * 60 * 60 * 1000) / 1000) }
           },
           {
+            groupId: { toNumber: () => 2 },
             id: '2',
             name: 'DeFi Savers',
             target: 5000,
             raised: 3200,
             members: 15,
+            totalMembers: 15,
+            memberCap: 20,
             category: 'Finance',
             model: { trust: true },
-            description: 'DeFi enthusiasts building wealth through smart savings'
+            description: 'DeFi enthusiasts building wealth through smart savings',
+            totalPool: { toNumber: () => 5000 * 1e6 },
+            contributionAmount: { toNumber: () => 250 * 1e6 },
+            currentTurnIndex: 8,
+            trustScore: 88,
+            createdAt: { toNumber: () => Math.floor((Date.now() - 8 * 24 * 60 * 60 * 1000) / 1000) }
           },
           {
+            groupId: { toNumber: () => 3 },
             id: '3',
             name: 'Creative Fund',
             target: 8000,
             raised: 4500,
             members: 20,
+            totalMembers: 20,
+            memberCap: 25,
             category: 'Arts',
             model: { superTrust: true },
-            description: 'Artists and creators pooling resources for projects'
+            description: 'Artists and creators pooling resources for projects',
+            totalPool: { toNumber: () => 8000 * 1e6 },
+            contributionAmount: { toNumber: () => 320 * 1e6 },
+            currentTurnIndex: 12,
+            trustScore: 92,
+            createdAt: { toNumber: () => Math.floor((Date.now() - 22 * 24 * 60 * 60 * 1000) / 1000) }
           }
         ]
         setGroups(allGroups)
@@ -89,8 +113,9 @@ const GroupsPage = () => {
       (filter === 'superTrust' && group.model.superTrust)
     
     const matchesSearch = searchTerm === '' || 
-      group.groupId.toString().includes(searchTerm.toLowerCase()) ||
-      formatGroupModel(group.model).toLowerCase().includes(searchTerm.toLowerCase())
+      group.groupId.toNumber().toString().includes(searchTerm.toLowerCase()) ||
+      formatGroupModel(group.model).toLowerCase().includes(searchTerm.toLowerCase()) ||
+      group.name.toLowerCase().includes(searchTerm.toLowerCase())
     
     return matchesFilter && matchesSearch
   })
@@ -301,4 +326,4 @@ const GroupsPage = () => {
   )
 }
 
-export default GroupsPage
+export default GroupsPageIntegrated

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useWallet } from './MinimalWalletProvider'
+import { useWallet } from '../hooks/useLightWallet'
 import { usdcStakingService } from '../services/USDCStakingService'
 
 // UI Components

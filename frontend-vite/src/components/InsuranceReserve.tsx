@@ -33,9 +33,9 @@ const InsuranceReserve = () => {
     coverageRatio: 0
   })
 
-  const [realTimeData, setRealTimeData] = useState<InsuranceData | null>(null)
-  const [riskDistribution, setRiskDistribution] = useState<RiskDistribution | null>(null)
-  const [claimActivity, setClaimActivity] = useState<ClaimActivity[]>([])
+  const [_realTimeData, setRealTimeData] = useState<InsuranceData | null>(null)
+  const [_riskDistribution, setRiskDistribution] = useState<RiskDistribution | null>(null)
+  const [_claimActivity, setClaimActivity] = useState<ClaimActivity[]>([])
   const [loading, setLoading] = useState(true)
   const [insuranceService] = useState(() => new SolanaInsuranceService())
 
@@ -119,6 +119,17 @@ const InsuranceReserve = () => {
 
   const formatPercentage = (value: number) => {
     return `${value.toFixed(1)}%`
+  }
+
+  if (loading) {
+    return (
+      <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 animate-glow">
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
+          <span className="ml-3 text-gray-300">Loading insurance data...</span>
+        </div>
+      </div>
+    )
   }
 
   return (

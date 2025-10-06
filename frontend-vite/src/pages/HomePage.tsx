@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useWallet, SimpleWalletButton } from '../components/MinimalWalletProvider'
+import { useWallet } from '../hooks/useLightWallet'
+import { LightWalletButton } from '../components/LightWalletButton'
 import Navigation from '../components/Navigation'
 import Footer from '../components/Footer'
 
@@ -116,7 +117,7 @@ const HomePage = () => {
               </>
             ) : (
               <>
-                <SimpleWalletButton className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 animate-glow shadow-lg border-none" />
+                <LightWalletButton />
                 <Link 
                   to="/groups"
                   className="border border-white/30 backdrop-blur-sm text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white/20 hover:border-white/50 transition-all duration-300"

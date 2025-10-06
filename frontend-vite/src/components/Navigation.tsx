@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { useWallet, SimpleWalletButton } from './MinimalWalletProvider'
+import { useWallet } from '../hooks/useLightWallet'
+import { LightWalletButton } from './LightWalletButton'
 import { Menu, X, Zap, Wallet } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -95,7 +96,7 @@ const Navigation: React.FC = () => {
                                     </Link>
                                 </div>
                             ) : (
-                                <SimpleWalletButton className="bg-blue-600 text-white font-medium px-6 py-2 rounded-lg border-none hover:bg-blue-700 transition-colors duration-200" />
+                                <LightWalletButton />
                             )}
                         </div>
                     </div>
@@ -147,7 +148,7 @@ const Navigation: React.FC = () => {
 
                             {!connected && (
                                 <div className="pt-4 border-t border-gray-700">
-                                    <SimpleWalletButton className="w-full bg-blue-600 text-white font-medium px-6 py-3 rounded-lg border-none hover:bg-blue-700 transition-colors duration-200" />
+                                    <LightWalletButton />
                                 </div>
                             )}
                         </div>

@@ -1,5 +1,3 @@
-import React from 'react'
-
 const DebugPage = () => {
   return (
     <div className="min-h-screen bg-gray-900 relative overflow-hidden">

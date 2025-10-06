@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useWallet } from '../components/MinimalWalletProvider'
+import { useWallet } from '../hooks/useLightWallet'
 import GroupCreation from '../components/GroupCreation'
 import PaymentFlow from '../components/PaymentFlow'
 import StakingInterface from '../components/StakingInterface'

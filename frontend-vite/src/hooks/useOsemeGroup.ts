@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useWallet } from './useWalletProvider'
+import { useWallet } from './useLightWallet'
 import { GroupModel, GroupStatus } from '../lib/solana'
 import SolanaYieldService from '../services/solanaYieldService'
 import SolanaInsuranceService from '../services/solanaInsuranceService'

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useWallet } from '../components/MinimalWalletProvider'
+import { useWallet } from '../hooks/useLightWallet'
 import NavigationIntegrated from '../components/NavigationIntegrated'
 import Footer from '../components/Footer'
 import RealYieldOptimization from '../components/RealYieldOptimization'
@@ -8,10 +8,9 @@ import RealInsuranceReserve from '../components/RealInsuranceReserve'
 import { RealDataDashboard } from '../components/RealDataCharts'
 
 const DashboardPage = () => {
-  const { connected, publicKey, connect } = useWallet()
+  const { connected, publicKey, connect, balance } = useWallet()
   const [userGroups, setUserGroups] = useState<any[]>([])
   const [activeTab, setActiveTab] = useState<'overview' | 'groups' | 'yield' | 'insurance' | 'analytics'>('overview')
-  const [balance, setBalance] = useState(0)
 
   useEffect(() => {
     const loadDashboard = async () => {
@@ -40,8 +39,7 @@ const DashboardPage = () => {
           }
         ])
         
-        // Mock balance - replace with actual balance fetch
-        setBalance(12.34)
+
       } catch (error) {
         console.error('Error loading dashboard:', error)
       }

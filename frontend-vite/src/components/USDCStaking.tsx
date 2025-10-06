@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useWallet } from './MinimalWalletProvider'
+import { useWallet } from '../hooks/useLightWallet'
 import { GroupTier, GROUP_TIER_CONFIGS } from '../lib/CompleteOsemeProgram'
 import { usdcStakingService } from '../services/USDCStakingService'
 import toast from 'react-hot-toast'

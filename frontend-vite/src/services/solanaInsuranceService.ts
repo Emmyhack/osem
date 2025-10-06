@@ -30,17 +30,21 @@ export interface ClaimActivity {
 
 class SolanaInsuranceService {
   private connection: Connection
-  private insurancePoolAddress: string
+  private _insurancePoolAddress: string
   private reserveAccounts: string[]
 
   constructor(rpcUrl: string = 'https://api.mainnet-beta.solana.com') {
     this.connection = new Connection(rpcUrl, 'confirmed')
-    this.insurancePoolAddress = 'INSuRaNcE1111111111111111111111111111111'
+    this._insurancePoolAddress = 'INSuRaNcE1111111111111111111111111111111'
     this.reserveAccounts = [
       'RESErVe111111111111111111111111111111111',
       'RESErVe222222222222222222222222222222222',
       'RESErVe333333333333333333333333333333333'
     ]
+  }
+
+  get insurancePoolAddress(): string {
+    return this._insurancePoolAddress
   }
 
   // Fetch real-time insurance pool data
@@ -99,7 +103,7 @@ class SolanaInsuranceService {
   // Simulate real-time insurance claims based on network activity
   async getRealtimeClaimActivity(): Promise<ClaimActivity[]> {
     try {
-      const slot = await this.connection.getSlot()
+      await this.connection.getSlot() // Get current slot for timing reference
       const recentTransactions = await this.connection.getConfirmedSignaturesForAddress2(
         new PublicKey('11111111111111111111111111111111'),
         { limit: 100 }
